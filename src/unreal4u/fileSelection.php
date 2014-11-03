@@ -47,7 +47,7 @@ abstract class fileSelection
      *            Whether to enable recursive mode. Defaults to true
      * @return directoryDeletion Returns same object for easy method concatenation
      */
-    public function constructFileList($path, $maxAge, $pattern = '', $recursive = true)
+    public function constructFileList($path, $maxAge = 0, $pattern = '', $recursive = true)
     {
         if ($recursive === true) {
             $this->_iterator = new \RecursiveIteratorIterator(
@@ -62,7 +62,7 @@ abstract class fileSelection
             $this->_iterator = new \RegexIterator($this->_iterator, $pattern);
         }
 
-        $this->_iterator = new filters\creationTimeFilterIterator($this->_iterator, $maxAge);
+        $this->_iterator = new filters\creationTimeFilterIterator($this->_iterator, $maxAge, true);
 
         return $this;
     }

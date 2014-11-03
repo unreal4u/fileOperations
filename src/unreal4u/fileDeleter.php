@@ -18,7 +18,7 @@ class fileDeleter extends fileSelection
             $fullFile = $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename();
             $this->deletedFiles[] = $fullFile;
             if ($this->_isTestMode) {
-                printf('[TESTMODE] Removing file or directory "%s"' . PHP_EOL, $fullFile);
+                printf('[DRY-RUN] Removing file or directory "%s"<br />' . PHP_EOL, $fullFile);
             } else {
                 if ($file->isDir()) {
                     rmdir($fullFile);

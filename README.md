@@ -13,6 +13,11 @@ About this class
 * A few examples are included, such as get the contents or delete them
 * Endless posibilities: just create your own and extend the abstract fileSelection class
 
+Disclaimer
+---------
+
+Usage of this class is entirely up to you. Read all documentation before you use this class!
+
 Detailed description
 ---------
 
@@ -22,8 +27,8 @@ based on a regex selector.
 
 After you have made your selection, you proceed to do the action. That action are actually classes that extend the base
 class and implement the final action which can be whatever you want. Included are 2 examples: a fileDeleter; which as
-the name states, is able to delete files; and a contentGetter, which reads the file out and puts together an array with
-data.
+the name states, is able to delete files (it also has a test mode, I suggest you use that before you put any code on
+production); and a contentGetter, which reads the file out and puts together an array with data.
 
 Basic usage
 ----------
@@ -55,6 +60,8 @@ Pending
 ---------
 
 * Unit tests!!
+* Change arguments in fileSelection to an array, with (optional) function callbacks
+* Also include broken symlinks as an optional parameter
 * Better documentation
 * More examples
 * A first stable release
@@ -64,6 +71,10 @@ Version History
 
 * 0.1.0:
     * Created basic class
+* 0.1.1:
+    * More documentation
+    * More examples
+    * Minor improvements: assume a default of 0 seconds of maximum file age
 
 Contact the author
 -------
