@@ -1,0 +1,21 @@
+{
+  "name" : "unreal4u/file-operations",
+  "description" : "This class is a collection of functions that deals with files",
+  "require" : {
+    "php" : ">=5.4.0"
+  },
+  "require-dev" : {
+    "phpunit/phpunit" : "4.1.*",
+    "mikey179/vfsStream" : "@stable"
+  },
+  "authors" : [ {
+    "name" : "Camilo Sperberg",
+    "email" : "me@unreal4u.com"
+  } ],
+  "autoload" : {
+    "psr-0" : {
+      "unreal4u" : "src/"
+    }
+  },
+  "license" : "MIT"
+}
