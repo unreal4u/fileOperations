@@ -75,6 +75,9 @@ Version History
     * More documentation
     * More examples
     * Minor improvements: assume a default of 0 seconds of maximum file age
+* 0.1.2:
+    * Array can be passed on with options
+    * First PHPUnit tests
 
 Contact the author
 -------
