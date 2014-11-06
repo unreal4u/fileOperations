@@ -24,18 +24,26 @@ class fileDeleterTest extends \PHPUnit_Framework_TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $structure = array(
-            'Core' => array(
-                'AbstractFactory' => array(
+        $structure = [
+            'Core' => [
+                'AbstractFactory' => [
                     'test.php' => 'some text content',
                     'other.php' => 'Some more text content',
                     'Invalid.csv' => 'Something else',
-                ),
-                'AnEmptyFolder' => array(),
+                ],
+                'AnEmptyFolder' => [],
                 'badlocation.php' => 'some bad content',
-            ),
+            ],
             'test.php' => 'Some other content',
-        );
+            'test002.php' => 'Content test002.php',
+            'testDirectory001' => [],
+            'testDirectory002' => [],
+            'testDirectory003' => [
+               'testFile001.txt' => 'Content testFile001.txt',
+               'testFile002.txt' => 'Content testFile002.txt',
+            ],
+            'testDirectoryNNN' => [],
+        ];
 
         $this->_filesystem = vfsStream::setup('exampleDir', null, $structure);
         $this->_fileDeleter = new fileDeleter();
@@ -52,12 +60,51 @@ class fileDeleterTest extends \PHPUnit_Framework_TestCase {
     /**
      * Tests whether setting filename goes well
      */
-    public function test_fileDeleter() {
+    public function test_simpleFileDeleter() {
         $options['pattern'] = '/test\.php/';
 
         $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->deleteAll();
         $this->assertFalse($this->_filesystem->hasChild('Core/AbstractFactory/test.php'));
         $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/other.php'));
         $this->assertFalse($this->_filesystem->hasChild('test.php'));
+        $this->assertTrue($this->_filesystem->hasChild('test002.php'));
+        $this->assertTrue($this->_filesystem->hasChild('testDirectory002'));
+        $this->assertTrue($this->_filesystem->hasChild('testDirectory003/testFile002.txt'));
+    }
+
+    public function test_noRecursionFileDeleter() {
+        $options['pattern'] = '/test\.php/';
+        $options['recursive'] = false;
+
+        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->deleteAll();
+        $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/test.php'));
+        $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/other.php'));
+        $this->assertFalse($this->_filesystem->hasChild('test.php'));
+        $this->assertTrue($this->_filesystem->hasChild('test002.php'));
+        $this->assertTrue($this->_filesystem->hasChild('testDirectory002'));
+        $this->assertTrue($this->_filesystem->hasChild('testDirectory003/testFile002.txt'));
+    }
+
+    public function test_deleteDirectory() {
+        $options['recursive'] = true;
+        $options['pattern'] = '/testDirectory\d{3}/';
+
+        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->deleteAll();
+        $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/test.php'));
+        $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/other.php'));
+        $this->assertTrue($this->_filesystem->hasChild('test.php'));
+        $this->assertTrue($this->_filesystem->hasChild('test002.php'));
+        $this->assertFalse($this->_filesystem->hasChild('testDirectory002'));
+        $this->assertFalse($this->_filesystem->hasChild('testDirectory003/testFile002.txt'));
+        $this->assertTrue($this->_filesystem->hasChild('testDirectoryNNN'));
+    }
+
+    public function test_TestMode() {
+        $options['pattern'] = '/test\.php/';
+        $options['recursive'] = false;
+
+        $this->_fileDeleter = new fileDeleter(true);
+        $this->expectOutputString('[DRY-RUN] Removing file or directory "vfs://exampleDir/test.php"<br />'.PHP_EOL);
+        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->deleteAll();
     }
 }

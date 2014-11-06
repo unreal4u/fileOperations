@@ -3,4 +3,5 @@
 .settings/
 vendor/
 tests/report/
+phpunit.xml
 composer.lock

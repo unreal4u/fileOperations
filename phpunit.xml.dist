@@ -1,0 +1,11 @@
+<phpunit colors="true" bootstrap="vendor/autoload.php" strict="true">
+    <filter>
+        <blacklist>
+            <directory suffix=".php">./vendor</directory>
+        </blacklist>
+    </filter>
+
+    <testsuite name="fileOperations">
+        <directory>./tests/</directory>
+    </testsuite>
+</phpunit>
