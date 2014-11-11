@@ -109,4 +109,11 @@ class fileDeleterTest extends \PHPUnit_Framework_TestCase {
         $this->expectOutputString('[DRY-RUN] Removing file or directory "vfs://exampleDir/test.php"<br />'.PHP_EOL);
         $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->deleteAll();
     }
+
+    public function test_noPattern() {
+        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'))->deleteAll();
+        $this->assertFalse($this->_filesystem->hasChild('Core/AbstractFactory/test.php'));
+        $this->assertFalse($this->_filesystem->hasChild('test.php'));
+        $this->assertFalse($this->_filesystem->hasChild('testDirectoryNNN'));
+    }
 }
