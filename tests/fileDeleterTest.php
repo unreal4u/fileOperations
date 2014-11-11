@@ -4,7 +4,9 @@ use org\bovigo\vfs\vfsStream;
 use unreal4u\fileDeleter;
 
 /**
- * pid test case.
+ * File deleter test class
+ *
+ * NOTE: This test will also test the fileSelection class
  */
 class fileDeleterTest extends \PHPUnit_Framework_TestCase {
     /**
