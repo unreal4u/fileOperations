@@ -1,6 +1,6 @@
 [![Latest Stable Version](https://poser.pugx.org/unreal4u/file-operations/v/stable.png)](https://packagist.org/packages/unreal4u/file-operations)
-[![Build Status](https://travis-ci.org/unreal4u/file-operations.png?branch=master)](https://travis-ci.org/unreal4u/file-operations)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/unreal4u/file-operations/badges/quality-score.png?s=bda9bffddbd3a8fb7f24782c42dfd4d57ea0d2d8)](https://scrutinizer-ci.com/g/unreal4u/file-operations/)
+[![Build Status](https://travis-ci.org/unreal4u/file-operations.png?branch=master)](https://travis-ci.org/unreal4u/fileOperations)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/unreal4u/file-operations/badges/quality-score.png?s=bda9bffddbd3a8fb7f24782c42dfd4d57ea0d2d8)](https://scrutinizer-ci.com/g/unreal4u/fileOperations/)
 [![License](https://poser.pugx.org/unreal4u/file-operations/license.png)](https://packagist.org/packages/unreal4u/file-operations)
 
 fileOperations
