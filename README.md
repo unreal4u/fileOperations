@@ -64,11 +64,8 @@ composer.json with:
 Pending
 ---------
 
-* Unit tests!!
 * Change arguments in fileSelection to an array, with (optional) function callbacks
-* Also include broken symlinks as an optional parameter
 * Better documentation
-* More examples
 * A first stable release
 
 Version History
@@ -83,6 +80,8 @@ Version History
 * 0.1.2:
     * Array can be passed on with options
     * First PHPUnit tests
+* 0.1.3:
+    * Complete code coverage
 
 Contact the author
 -------
