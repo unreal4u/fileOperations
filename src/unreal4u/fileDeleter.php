@@ -16,7 +16,7 @@ class fileDeleter extends fileSelection
     /**
      * Performs the actual deletion of the previous delete selection
      *
-     * @return directoryDeletion Returns same object for easy method concatenation
+     * @return fileDeleter Returns same object for easy method concatenation
      */
     public function perform()
     {

@@ -17,6 +17,7 @@ About this class
 * This class will allow you to select files and perform operations on them.
 * A few examples are included, such as get the contents or delete them
 * Endless posibilities: just create your own and extend the abstract fileSelection class
+* Needs PHP5.4.0+
 
 Disclaimer
 ---------
@@ -41,7 +42,10 @@ Basic usage
 <pre>include('vendor/autoload.php');
 // Instantiate a deleter in test mode
 $fileDeleter = new unreal4u\fileDeleter(true);
-$fileDeleter->constructFileList('testdir/', 0, '/test\d{3}\.txt/')->deleteAll();
+$options = [
+    'pattern' => '/test\d{3}\.txt/',
+];
+$fileDeleter->constructFileList('testdir/', $options)->deleteAll();
 </pre>
 
 * Congratulations! All files that comply with the requirements would have been deleted!
@@ -82,6 +86,9 @@ Version History
     * First PHPUnit tests
 * 0.1.3:
     * Complete code coverage
+* 0.2.0:
+    * BC breakage: function names changed
+    * Common interface
 
 Contact the author
 -------
