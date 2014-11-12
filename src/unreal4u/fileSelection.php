@@ -8,7 +8,7 @@ namespace unreal4u;
 /**
  * Constructs a list of files (filterable with iterator) according to given input
  */
-abstract class fileSelection
+abstract class fileSelection implements fileActionInterface
 {
 
     /**
@@ -64,12 +64,8 @@ abstract class fileSelection
      *
      * @param string $path
      *            The path we want to check
-     * @param int $maxAge
-     *            Minimum of seconds since last file modification
-     * @param string $pattern
-     *            Regex pattern to filter some things out
-     * @param boolean $recursive
-     *            Whether to enable recursive mode. Defaults to true
+     * @param array $options
+     *            Array with options, for now these are 'pattern', 'maxAge', 'recursive' and 'includeBrokenSymlink'
      * @return \unreal4u\fileSelection Returns same object for easy method concatenation
      */
     public function constructFileList($path, array $options = [])

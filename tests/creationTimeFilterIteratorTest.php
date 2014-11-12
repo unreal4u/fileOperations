@@ -3,9 +3,7 @@
 use unreal4u\fileDeleter;
 
 /**
- * File deleter test class
- *
- * NOTE: This test will also test the fileSelection class
+ * creationTimeFilterIterator test class
  */
 class creationTimeFilterIterator extends \PHPUnit_Framework_TestCase {
     /**
@@ -36,7 +34,7 @@ class creationTimeFilterIterator extends \PHPUnit_Framework_TestCase {
         \touch('tmp/test.test', time() - 30);
         \touch('tmp/test2.test', time() - 10);
         $this->_fileDeleter = new fileDeleter();
-        $this->_fileDeleter->constructFileList('tmp/', ['maxAge' => 15, 'pattern' => '/.*\.test$/'])->deleteAll();
+        $this->_fileDeleter->constructFileList('tmp/', ['maxAge' => 15, 'pattern' => '/.*\.test$/'])->perform();
         $this->assertFileNotExists('tmp/test.test');
         $this->assertFileExists('tmp/test2.test');
         \unlink('tmp/test2.test');

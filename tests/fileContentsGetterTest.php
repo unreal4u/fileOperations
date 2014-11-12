@@ -4,11 +4,11 @@ use org\bovigo\vfs\vfsStream;
 use unreal4u\fileContentsGetter;
 
 /**
- * pid test case.
+ * FileContentsGetter test case.
  */
 class fileContentsGetterTest extends \PHPUnit_Framework_TestCase {
     /**
-     * @var pid
+     * @var fileContentsGetter
      */
     private $_fileContentsGetter = null;
 
@@ -63,7 +63,7 @@ class fileContentsGetterTest extends \PHPUnit_Framework_TestCase {
     public function test_simpleFileContentsGetter() {
         $options['pattern'] = '/test\d*\.php/';
 
-        $fileList = $this->_fileContentsGetter->constructFileList($this->_filesystem->url('exampleDir'), $options)->getFilelist();
+        $fileList = $this->_fileContentsGetter->constructFileList($this->_filesystem->url('exampleDir'), $options)->perform();
         $this->assertCount(3, $fileList);
         $this->assertEquals('Text content from /Core/AbstractFactory/test.php', reset($fileList));
     }

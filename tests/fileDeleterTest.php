@@ -10,7 +10,7 @@ use unreal4u\fileDeleter;
  */
 class fileDeleterTest extends \PHPUnit_Framework_TestCase {
     /**
-     * @var pid
+     * @var fileDeleter
      */
     private $_fileDeleter = null;
 
@@ -65,7 +65,7 @@ class fileDeleterTest extends \PHPUnit_Framework_TestCase {
     public function test_simpleFileDeleter() {
         $options['pattern'] = '/test\.php/';
 
-        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->deleteAll();
+        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->perform();
         $this->assertFalse($this->_filesystem->hasChild('Core/AbstractFactory/test.php'));
         $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/other.php'));
         $this->assertFalse($this->_filesystem->hasChild('test.php'));
@@ -74,11 +74,14 @@ class fileDeleterTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($this->_filesystem->hasChild('testDirectory003/testFile002.txt'));
     }
 
+    /**
+     * Tests the optional recursion parameter
+     */
     public function test_noRecursionFileDeleter() {
         $options['pattern'] = '/test\.php/';
         $options['recursive'] = false;
 
-        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->deleteAll();
+        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->perform();
         $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/test.php'));
         $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/other.php'));
         $this->assertFalse($this->_filesystem->hasChild('test.php'));
@@ -87,11 +90,14 @@ class fileDeleterTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($this->_filesystem->hasChild('testDirectory003/testFile002.txt'));
     }
 
+    /**
+     * Tests whether the class is able to delete a directory
+     */
     public function test_deleteDirectory() {
         $options['recursive'] = true;
         $options['pattern'] = '/testDirectory\d{3}/';
 
-        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->deleteAll();
+        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->perform();
         $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/test.php'));
         $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/other.php'));
         $this->assertTrue($this->_filesystem->hasChild('test.php'));
@@ -101,17 +107,24 @@ class fileDeleterTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($this->_filesystem->hasChild('testDirectoryNNN'));
     }
 
+    /**
+     * Tests whether the test mode works and doesn't actually delete anything
+     */
     public function test_TestMode() {
         $options['pattern'] = '/test\.php/';
         $options['recursive'] = false;
 
         $this->_fileDeleter = new fileDeleter(true);
         $this->expectOutputString('[DRY-RUN] Removing file or directory "vfs://exampleDir/test.php"<br />'.PHP_EOL);
-        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->deleteAll();
+        $this->assertTrue($this->_filesystem->hasChild('test.php'));
+        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->perform();
     }
 
+    /**
+     * Tests whether filtering without using the regex iterator works as intended
+     */
     public function test_noPattern() {
-        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'))->deleteAll();
+        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'))->perform();
         $this->assertFalse($this->_filesystem->hasChild('Core/AbstractFactory/test.php'));
         $this->assertFalse($this->_filesystem->hasChild('test.php'));
         $this->assertFalse($this->_filesystem->hasChild('testDirectoryNNN'));

@@ -7,13 +7,13 @@ namespace unreal4u;
 class fileContentsGetter extends fileSelection
 {
 
-    public function getFilelist()
+    public function perform()
     {
         $output = [];
         foreach ($this->_iterator as $file) {
             if (! $file->isDir()) {
                 $filename = $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename();
-                $output[$filename] = file_get_contents($filename);
+                $output[$filename] = \file_get_contents($filename);
             }
         }
 
