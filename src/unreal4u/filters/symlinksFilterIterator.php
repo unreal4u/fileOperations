@@ -4,15 +4,15 @@ namespace unreal4u\filters;
 /**
  * Filters a RecursiveDirectoryIterator based on how many seconds ago it was modified
  */
-class creationTimeFilterIterator extends \FilterIterator
+class symlinksFilterIterator extends \FilterIterator
 {
 
     /**
-     * From which timestamp we must consider a file to be valid to be considered
+     * Whether to include broken symlinks
      *
-     * @var int
+     * @var boolean
      */
-    protected $_fromTimestamp = 0;
+    private $_includeBrokenSymlink = true;
 
     /**
      * Constructor
@@ -20,10 +20,10 @@ class creationTimeFilterIterator extends \FilterIterator
      * @param \Iterator $iterator
      * @param int $secondsAgo
      */
-    public function __construct(\Iterator $iterator, $secondsAgo)
+    public function __construct(\Iterator $iterator, $includeBrokenSymlink = true)
     {
         parent::__construct($iterator);
-        $this->_fromTimestamp = time() - $secondsAgo;
+        $this->_includeBrokenSymlink = $includeBrokenSymlink;
     }
 
     /**
@@ -36,10 +36,10 @@ class creationTimeFilterIterator extends \FilterIterator
         $filename = $this->getRealPath();
         // Broken symlinks will have an empty RealPath (because they don't exist)
         if (! empty($filename)) {
-            return ($this->getMTime() <= $this->_fromTimestamp);
+            return true;
         }
 
         // Empty filename, so most probably a broken symlink
-        return false;
+        return $this->_includeBrokenSymlink;
     }
 }

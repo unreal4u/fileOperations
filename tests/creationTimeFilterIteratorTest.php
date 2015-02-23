@@ -30,7 +30,7 @@ class creationTimeFilterIterator extends \PHPUnit_Framework_TestCase {
      * There is no way (yet) in vfsStream to touch a file, so do it the old way
      */
     public function test_Timeout() {
-        \mkdir('tmp');
+        @\mkdir('tmp'); // Hate to do it, but an error in the tests will create the directory but won't wipe it out
         \touch('tmp/test.test', time() - 30);
         \touch('tmp/test2.test', time() - 10);
         $this->_fileDeleter = new fileDeleter();

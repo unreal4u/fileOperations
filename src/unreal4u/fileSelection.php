@@ -85,12 +85,29 @@ abstract class fileSelection implements fileActionInterface
             $this->_iterator = new \RegexIterator($this->_iterator, $this->_options['pattern']);
         }
 
-        $this->_iterator = new filters\creationTimeFilterIterator(
-            $this->_iterator,
-            $this->_options['maxAge'],
-            $this->_options['includeBrokenSymlink']
-        );
+        /*if (! empty($this->_options['includeBrokenSymlink'])) {
+            $this->_iterator = new filters\symlinksFilterIterator($this->_iterator, true);
+        }*/
+
+        if (! empty($this->_options['maxAge'])) {
+            $this->_iterator = new filters\creationTimeFilterIterator($this->_iterator, $this->_options['maxAge']);
+        }
 
         return $this;
+    }
+
+    /**
+     * Creates a JSON string with all filenames, no content, just filenames
+     */
+    public function __toString() {
+        $result = [];
+
+        if (!empty($this->_iterator)) {
+            foreach ($this->_iterator as $file) {
+                $result[] = $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename();
+            }
+        }
+
+        return \json_encode($result);
     }
 }

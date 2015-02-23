@@ -129,4 +129,19 @@ class fileDeleterTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($this->_filesystem->hasChild('test.php'));
         $this->assertFalse($this->_filesystem->hasChild('testDirectoryNNN'));
     }
+
+    /* @TODO
+    public function test_brokenSymlink() {
+        #\symlink($this->_filesystem->path('mySymlink'), $this->_filesystem->path('test.php'));
+        #var_dump($this->_filesystem->path('test.php'));
+
+        #var_dump($this->_filesystem->getChild('test.php')->getRealChildName());
+
+        #print_r(vfsStream::inspect(new org\bovigo\vfs\visitor\vfsStreamStructureVisitor())->getStructure());
+        #\unlink($this->_filesystem->url('test.php'));
+
+        #$this->assertFalse($this->_filesystem->hasChild('test.php'));
+        #$this->assertTrue($this->_filesystem->hasChild('test.php'));
+    }
+    */
 }
