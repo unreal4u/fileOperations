@@ -2,19 +2,27 @@
   "name" : "unreal4u/file-operations",
   "description" : "This class is a collection of functions that deals with files",
   "require" : {
-    "php" : ">=5.4.0"
+    "php" : ">=7.0.0",
+    "roave/security-advisories": "dev-master",
+    "unreal4u/dummy-logger": "~1.0"
   },
   "require-dev" : {
-    "phpunit/phpunit" : "@stable",
-    "mikey179/vfsStream" : "@stable"
+    "phpunit/phpunit" : "^6.2",
+    "mikey179/vfsStream" : "@stable",
+    "monolog/monolog": "~1.18"
   },
   "authors" : [ {
     "name" : "Camilo Sperberg",
-    "email" : "me@unreal4u.com"
+    "email" : "me+ghfileops@unreal4u.com"
   } ],
   "autoload" : {
-    "psr-0" : {
-      "unreal4u" : "src/"
+    "psr-4" : {
+      "unreal4u\\FileOperations\\" : "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "tests\\unreal4u\\FileOperations\\": "tests"
     }
   },
   "license" : "MIT"

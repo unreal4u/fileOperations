@@ -1,12 +1,14 @@
 <?php
-namespace unreal4u;
+
+declare(strict_types=1);
+
+namespace unreal4u\FileOperations;
 
 /**
  * Gets the contents of our previously declared iterator
  */
-class fileDeleter extends fileSelection
+class FileDeleter extends FileSelection
 {
-
     /**
      * Contains the full path of all files that were deleted
      * @var array
@@ -16,20 +18,19 @@ class fileDeleter extends fileSelection
     /**
      * Performs the actual deletion of the previous delete selection
      *
-     * @return fileDeleter Returns same object for easy method concatenation
+     * @return FileDeleter Returns same object for easy method concatenation
      */
-    public function perform()
+    public function perform(): FileActionInterface
     {
-        foreach ($this->_iterator as $file) {
+        foreach ($this->iterator as $file) {
             $fullFile = $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename();
             $this->deletedFiles[] = $fullFile;
-            if ($this->_isTestMode) {
-                \printf('[DRY-RUN] Removing file or directory "%s"<br />' . PHP_EOL, $fullFile);
-            } else {
+            $this->logger->info('Removing', ['file' => $fullFile, 'dry-run' => $this->isTestMode]);
+            if ($this->isTestMode === false) {
                 if ($file->isDir()) {
-                    \rmdir($fullFile);
+                    rmdir($fullFile);
                 } else {
-                    \unlink($fullFile);
+                    unlink($fullFile);
                 }
             }
         }

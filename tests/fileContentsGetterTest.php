@@ -1,22 +1,25 @@
 <?php
 
+namespace tests\unreal4u\FileOperations;
+
 use org\bovigo\vfs\vfsStream;
-use unreal4u\fileContentsGetter;
+use PHPUnit\Framework\TestCase;
+use unreal4u\FileOperations\FileContentsGetter;
 
 /**
  * FileContentsGetter test case.
  */
-class fileContentsGetterTest extends \PHPUnit_Framework_TestCase {
+class fileContentsGetterTest extends TestCase {
     /**
-     * @var fileContentsGetter
+     * @var FileContentsGetter
      */
-    private $_fileContentsGetter = null;
+    private $fileContentsGetter;
 
     /**
      * Contains the filesystem
      * @var vfsStream
      */
-    private $_filesystem = null;
+    private $filesystem;
 
     /**
      * Prepares the environment before running a test.
@@ -45,15 +48,15 @@ class fileContentsGetterTest extends \PHPUnit_Framework_TestCase {
             'testDirectoryNNN' => [],
         ];
 
-        $this->_filesystem = vfsStream::setup('exampleDir', null, $structure);
-        $this->_fileContentsGetter = new fileContentsGetter();
+        $this->filesystem = vfsStream::setup('exampleDir', null, $structure);
+        $this->fileContentsGetter = new FileContentsGetter();
     }
 
     /**
      * Cleans up the environment after running a test.
      */
     protected function tearDown() {
-        $this->_fileContentsGetter = null;
+        $this->fileContentsGetter = null;
         parent::tearDown();
     }
 
@@ -63,7 +66,8 @@ class fileContentsGetterTest extends \PHPUnit_Framework_TestCase {
     public function test_simpleFileContentsGetter() {
         $options['pattern'] = '/test\d*\.php/';
 
-        $fileList = $this->_fileContentsGetter->constructFileList($this->_filesystem->url('exampleDir'), $options)->perform();
+        $this->fileContentsGetter->constructFileList($this->filesystem->url('exampleDir'), $options)->perform();
+        $fileList = $this->fileContentsGetter->getOutput();
         $this->assertCount(3, $fileList);
         $this->assertEquals('Text content from /Core/AbstractFactory/test.php', reset($fileList));
     }

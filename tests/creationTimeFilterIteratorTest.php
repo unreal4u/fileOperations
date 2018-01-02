@@ -1,28 +1,24 @@
 <?php
 
-use unreal4u\fileDeleter;
+namespace tests\unreal4u\FileOperations;
+
+use PHPUnit\Framework\TestCase;
+use unreal4u\FileOperations\FileDeleter;
 
 /**
  * creationTimeFilterIterator test class
  */
-class creationTimeFilterIterator extends \PHPUnit_Framework_TestCase {
+class creationTimeFilterIteratorTest extends TestCase {
     /**
-     * @var pid
+     * @var FileDeleter
      */
-    private $_fileDeleter = null;
-
-    /**
-     * Prepares the environment before running a test.
-     */
-    protected function setUp() {
-        parent::setUp();
-    }
+    private $fileDeleter;
 
     /**
      * Cleans up the environment after running a test.
      */
     protected function tearDown() {
-        $this->_fileDeleter = null;
+        $this->fileDeleter = null;
         parent::tearDown();
     }
 
@@ -33,8 +29,8 @@ class creationTimeFilterIterator extends \PHPUnit_Framework_TestCase {
         @\mkdir('tmp'); // Hate to do it, but an error in the tests will create the directory but won't wipe it out
         \touch('tmp/test.test', time() - 30);
         \touch('tmp/test2.test', time() - 10);
-        $this->_fileDeleter = new fileDeleter();
-        $this->_fileDeleter->constructFileList('tmp/', ['maxAge' => 15, 'pattern' => '/.*\.test$/'])->perform();
+        $this->fileDeleter = new FileDeleter();
+        $this->fileDeleter->constructFileList('tmp/', ['maxAge' => 15, 'pattern' => '/.*\.test$/'])->perform();
         $this->assertFileNotExists('tmp/test.test');
         $this->assertFileExists('tmp/test2.test');
         \unlink('tmp/test2.test');

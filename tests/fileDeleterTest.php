@@ -1,24 +1,27 @@
 <?php
 
+namespace tests\unreal4u\FileOperations;
+
 use org\bovigo\vfs\vfsStream;
-use unreal4u\fileDeleter;
+use PHPUnit\Framework\TestCase;
+use unreal4u\FileOperations\FileDeleter;
 
 /**
  * File deleter test class
  *
  * NOTE: This test will also test the fileSelection class
  */
-class fileDeleterTest extends \PHPUnit_Framework_TestCase {
+class fileDeleterTest extends TestCase {
     /**
-     * @var fileDeleter
+     * @var FileDeleter
      */
-    private $_fileDeleter = null;
+    private $fileDeleter;
 
     /**
      * Contains the filesystem
      * @var vfsStream
      */
-    private $_filesystem = null;
+    private $filesystem;
 
     /**
      * Prepares the environment before running a test.
@@ -47,15 +50,15 @@ class fileDeleterTest extends \PHPUnit_Framework_TestCase {
             'testDirectoryNNN' => [],
         ];
 
-        $this->_filesystem = vfsStream::setup('exampleDir', null, $structure);
-        $this->_fileDeleter = new fileDeleter();
+        $this->filesystem = vfsStream::setup('exampleDir', null, $structure);
+        $this->fileDeleter = new FileDeleter();
     }
 
     /**
      * Cleans up the environment after running a test.
      */
     protected function tearDown() {
-        $this->_fileDeleter = null;
+        $this->fileDeleter = null;
         parent::tearDown();
     }
 
@@ -65,13 +68,13 @@ class fileDeleterTest extends \PHPUnit_Framework_TestCase {
     public function test_simpleFileDeleter() {
         $options['pattern'] = '/test\.php/';
 
-        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->perform();
-        $this->assertFalse($this->_filesystem->hasChild('Core/AbstractFactory/test.php'));
-        $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/other.php'));
-        $this->assertFalse($this->_filesystem->hasChild('test.php'));
-        $this->assertTrue($this->_filesystem->hasChild('test002.php'));
-        $this->assertTrue($this->_filesystem->hasChild('testDirectory002'));
-        $this->assertTrue($this->_filesystem->hasChild('testDirectory003/testFile002.txt'));
+        $this->fileDeleter->constructFileList($this->filesystem->url('exampleDir'), $options)->perform();
+        $this->assertFalse($this->filesystem->hasChild('Core/AbstractFactory/test.php'));
+        $this->assertTrue($this->filesystem->hasChild('Core/AbstractFactory/other.php'));
+        $this->assertFalse($this->filesystem->hasChild('test.php'));
+        $this->assertTrue($this->filesystem->hasChild('test002.php'));
+        $this->assertTrue($this->filesystem->hasChild('testDirectory002'));
+        $this->assertTrue($this->filesystem->hasChild('testDirectory003/testFile002.txt'));
     }
 
     /**
@@ -81,13 +84,13 @@ class fileDeleterTest extends \PHPUnit_Framework_TestCase {
         $options['pattern'] = '/test\.php/';
         $options['recursive'] = false;
 
-        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->perform();
-        $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/test.php'));
-        $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/other.php'));
-        $this->assertFalse($this->_filesystem->hasChild('test.php'));
-        $this->assertTrue($this->_filesystem->hasChild('test002.php'));
-        $this->assertTrue($this->_filesystem->hasChild('testDirectory002'));
-        $this->assertTrue($this->_filesystem->hasChild('testDirectory003/testFile002.txt'));
+        $this->fileDeleter->constructFileList($this->filesystem->url('exampleDir'), $options)->perform();
+        $this->assertTrue($this->filesystem->hasChild('Core/AbstractFactory/test.php'));
+        $this->assertTrue($this->filesystem->hasChild('Core/AbstractFactory/other.php'));
+        $this->assertFalse($this->filesystem->hasChild('test.php'));
+        $this->assertTrue($this->filesystem->hasChild('test002.php'));
+        $this->assertTrue($this->filesystem->hasChild('testDirectory002'));
+        $this->assertTrue($this->filesystem->hasChild('testDirectory003/testFile002.txt'));
     }
 
     /**
@@ -97,14 +100,14 @@ class fileDeleterTest extends \PHPUnit_Framework_TestCase {
         $options['recursive'] = true;
         $options['pattern'] = '/testDirectory\d{3}/';
 
-        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->perform();
-        $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/test.php'));
-        $this->assertTrue($this->_filesystem->hasChild('Core/AbstractFactory/other.php'));
-        $this->assertTrue($this->_filesystem->hasChild('test.php'));
-        $this->assertTrue($this->_filesystem->hasChild('test002.php'));
-        $this->assertFalse($this->_filesystem->hasChild('testDirectory002'));
-        $this->assertFalse($this->_filesystem->hasChild('testDirectory003/testFile002.txt'));
-        $this->assertTrue($this->_filesystem->hasChild('testDirectoryNNN'));
+        $this->fileDeleter->constructFileList($this->filesystem->url('exampleDir'), $options)->perform();
+        $this->assertTrue($this->filesystem->hasChild('Core/AbstractFactory/test.php'));
+        $this->assertTrue($this->filesystem->hasChild('Core/AbstractFactory/other.php'));
+        $this->assertTrue($this->filesystem->hasChild('test.php'));
+        $this->assertTrue($this->filesystem->hasChild('test002.php'));
+        $this->assertFalse($this->filesystem->hasChild('testDirectory002'));
+        $this->assertFalse($this->filesystem->hasChild('testDirectory003/testFile002.txt'));
+        $this->assertTrue($this->filesystem->hasChild('testDirectoryNNN'));
     }
 
     /**
@@ -114,20 +117,20 @@ class fileDeleterTest extends \PHPUnit_Framework_TestCase {
         $options['pattern'] = '/test\.php/';
         $options['recursive'] = false;
 
-        $this->_fileDeleter = new fileDeleter(true);
+        $this->fileDeleter = new FileDeleter(true);
         $this->expectOutputString('[DRY-RUN] Removing file or directory "vfs://exampleDir/test.php"<br />'.PHP_EOL);
-        $this->assertTrue($this->_filesystem->hasChild('test.php'));
-        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'), $options)->perform();
+        $this->assertTrue($this->filesystem->hasChild('test.php'));
+        $this->fileDeleter->constructFileList($this->filesystem->url('exampleDir'), $options)->perform();
     }
 
     /**
      * Tests whether filtering without using the regex iterator works as intended
      */
     public function test_noPattern() {
-        $this->_fileDeleter->constructFileList($this->_filesystem->url('exampleDir'))->perform();
-        $this->assertFalse($this->_filesystem->hasChild('Core/AbstractFactory/test.php'));
-        $this->assertFalse($this->_filesystem->hasChild('test.php'));
-        $this->assertFalse($this->_filesystem->hasChild('testDirectoryNNN'));
+        $this->fileDeleter->constructFileList($this->filesystem->url('exampleDir'))->perform();
+        $this->assertFalse($this->filesystem->hasChild('Core/AbstractFactory/test.php'));
+        $this->assertFalse($this->filesystem->hasChild('test.php'));
+        $this->assertFalse($this->filesystem->hasChild('testDirectoryNNN'));
     }
 
     /* @TODO
