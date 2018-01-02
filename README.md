@@ -72,7 +72,9 @@ composer.json with:
 
 # Version History
 
-* 0.3.0:
+This package will be compatible with Semver once it reaches v1.0.0.
+
+* 0.4.0:
     * PHP7+ compatibility
 * 0.2.0:
     * BC breakage: function names changed
