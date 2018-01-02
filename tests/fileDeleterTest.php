@@ -118,9 +118,8 @@ class fileDeleterTest extends TestCase {
         $options['recursive'] = false;
 
         $this->fileDeleter = new FileDeleter(true);
-        $this->expectOutputString('[DRY-RUN] Removing file or directory "vfs://exampleDir/test.php"<br />'.PHP_EOL);
-        $this->assertTrue($this->filesystem->hasChild('test.php'));
         $this->fileDeleter->constructFileList($this->filesystem->url('exampleDir'), $options)->perform();
+        $this->assertTrue($this->filesystem->hasChild('test.php'));
     }
 
     /**
