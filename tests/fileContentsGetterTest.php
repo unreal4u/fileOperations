@@ -67,8 +67,17 @@ class fileContentsGetterTest extends TestCase {
         $options['pattern'] = '/test\d*\.php/';
 
         $this->fileContentsGetter->constructFileList($this->filesystem->url('exampleDir'), $options)->perform();
-        $fileList = $this->fileContentsGetter->getOutput();
-        $this->assertCount(3, $fileList);
-        $this->assertEquals('Text content from /Core/AbstractFactory/test.php', reset($fileList));
+        $i = 0;
+        foreach ($this->fileContentsGetter->getOutput() as $filename => $fileContents) {
+            $i++;
+            // Only test first result
+            if ($i === 1) {
+                $this->assertSame('Text content from /Core/AbstractFactory/test.php', $fileContents);
+                $this->assertSame('vfs://exampleDir/Core/AbstractFactory/test.php', $filename);
+            }
+        }
+
+        // Assert filters works by knowing we only got 3 results back in total
+        $this->assertSame(3, $i);
     }
 }

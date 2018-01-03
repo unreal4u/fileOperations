@@ -31,7 +31,7 @@ class FileContentsGetter extends FileSelection
     public function getOutput(): \Generator
     {
         foreach ($this->output as $filename => $result) {
-            yield [$filename => $result];
+            yield $filename => $result;
         }
     }
 }
