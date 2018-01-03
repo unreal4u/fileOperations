@@ -66,7 +66,7 @@ abstract class FileSelection implements FileActionInterface
      * Sets the defaults
      *
      * @param array $options
-     * @return \unreal4u\fileSelection
+     * @return self
      */
     private function setDefaults(array $options = []): self
     {
@@ -81,7 +81,7 @@ abstract class FileSelection implements FileActionInterface
      *            The path we want to check
      * @param array $options
      *            Array with options, for now these are 'pattern', 'maxAge', 'recursive' and 'includeBrokenSymlink'
-     * @return \unreal4u\fileSelection Returns same object for easy method concatenation
+     * @return FileActionInterface Returns same object for easy method concatenation
      */
     public function constructFileList(string $path, array $options = []): FileActionInterface
     {
@@ -89,7 +89,7 @@ abstract class FileSelection implements FileActionInterface
 
         if ($this->options['recursive'] === true) {
             $this->iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
+                new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS | \RecursiveDirectoryIterator::FOLLOW_SYMLINKS),
                 \RecursiveIteratorIterator::CHILD_FIRST
             );
         } else {
