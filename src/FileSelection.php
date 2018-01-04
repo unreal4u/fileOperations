@@ -44,6 +44,7 @@ abstract class FileSelection implements FileActionInterface
         'maxAge' => 0,
         'pattern' => '',
         'recursive' => true,
+        'maxDepth' => -1,
         'includeBrokenSymlink' => true,
         // 'Filters' => [Filters\creationTimeFilterIterator],
     ];
@@ -89,14 +90,18 @@ abstract class FileSelection implements FileActionInterface
 
         if ($this->options['recursive'] === true) {
             $this->iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS | \RecursiveDirectoryIterator::FOLLOW_SYMLINKS),
+                new \RecursiveDirectoryIterator(
+                    $path,
+                    \FilesystemIterator::SKIP_DOTS | \RecursiveDirectoryIterator::FOLLOW_SYMLINKS
+                ),
                 \RecursiveIteratorIterator::CHILD_FIRST
             );
+            $this->iterator->setMaxDepth($this->options['maxDepth']);
         } else {
             $this->iterator = new \IteratorIterator(new \directoryIterator($path));
         }
 
-        if (!empty($this->options['pattern'])) {
+        if ($this->options['pattern'] !== '') {
             $this->iterator = new \RegexIterator($this->iterator, $this->options['pattern']);
         }
 
@@ -104,7 +109,7 @@ abstract class FileSelection implements FileActionInterface
             $this->_iterator = new Filters\symlinksFilterIterator($this->_iterator, true);
         }*/
 
-        if (!empty($this->options['maxAge'])) {
+        if ($this->options['maxAge'] !== 0) {
             $this->iterator = new CreationTimeFilterIterator($this->iterator, $this->options['maxAge']);
         }
 
