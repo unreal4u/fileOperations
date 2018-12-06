@@ -3,7 +3,6 @@
   "description" : "This class is a collection of functions that deals with files",
   "require" : {
     "php" : ">=7.0.0",
-    "roave/security-advisories": "dev-master",
     "unreal4u/dummy-logger": "~1.0"
   },
   "require-dev" : {
